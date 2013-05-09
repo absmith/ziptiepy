@@ -140,6 +140,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'south',
+    'ziptiepy.core',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -170,6 +171,10 @@ LOGGING = {
         },
     }
 }
+
+ADAPTERS = (
+    'ciscoios',
+)
 
 # Then load local settings from a file with tight filesystem permissions.
 # Import server specific settings
