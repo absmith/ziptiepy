@@ -42,6 +42,6 @@ class Command(BaseCommand):
                 raise CommandError('Device ID "%s" does not exist' % options['device_id'])
         
         for device in devices:
-            hosts.append("ssh://" + device.access_ip)
+            hosts.append(device.protocol + device.access_ip)
         
         print hosts

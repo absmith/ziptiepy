@@ -176,6 +176,11 @@ ADAPTERS = (
     'ciscoios',
 )
 
+PROTOCOLS = (
+    ('ssh://', 'SSH'),
+    ('telnet://', 'TELNET')
+)
+
 # Then load local settings from a file with tight filesystem permissions.
 # Import server specific settings
 try:
