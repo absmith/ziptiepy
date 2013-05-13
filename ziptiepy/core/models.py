@@ -1,3 +1,4 @@
+from base64 import b64encode, b64decode
 import ipaddr
 
 from django.db import models
@@ -10,13 +11,13 @@ from django.utils.encoding import python_2_unicode_compatible
 class Credential(models.Model):
     """ """       
     name = models.CharField(max_length=128)
-    descripton = models.TextField()
+    descripton = models.TextField(blank=True)
     
     username = models.CharField(max_length=128)
-    password = models.TextField()
+    password = models.CharField(max_length=128)
     
-    enable_username = models.CharField(max_length=128)
-    enable_password = models.TextField()
+    enable_username = models.CharField(max_length=128, blank=True)
+    enable_password = models.CharField(max_length=128, blank=True)
     
     ip_mappings = models.TextField()
     
