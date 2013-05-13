@@ -6,7 +6,7 @@ from Exscript.util.start import quickstart
 from django.core.management.base import BaseCommand, CommandError
 
 # ziptiepy modules
-from ziptiepy.core.models import Device
+from ziptiepy.core.models import Credential, Device
 from ziptiepy.adapters import adapter_map
 
 hosts = []
@@ -42,6 +42,10 @@ class Command(BaseCommand):
                 raise CommandError('Device ID "%s" does not exist' % options['device_id'])
         
         for device in devices:
+            for credential in Credential.objects.all():
+                if credential.match_ip(device.access_ip):
+                    print credential
+                    
             hosts.append(device.protocol + device.access_ip)
         
         print hosts

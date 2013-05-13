@@ -2,11 +2,13 @@ import ipaddr
 
 from django.db import models
 from django.conf import settings
+from django.utils.encoding import python_2_unicode_compatible
 
 # Create your models here.
 
+@python_2_unicode_compatible
 class Credential(models.Model):
-    """ """
+    """ """       
     name = models.CharField(max_length=128)
     descripton = models.TextField()
     
@@ -18,6 +20,9 @@ class Credential(models.Model):
     
     ip_mappings = models.TextField()
     
+    def __str__(self):
+        return "Credential: %s" % self.name
+        
     def match_ip(self, ip):
         match = False
         for x in self.ip_mappings.split(','):
@@ -31,7 +36,8 @@ class Credential(models.Model):
                 if ipaddr.IPv4Address(ip) == ipaddr.IPv4Address(x):
                     match = True
         return match
-
+        
+@python_2_unicode_compatible
 class Device(models.Model):
     """ """
     created = models.DateTimeField(auto_now_add=True)
@@ -46,6 +52,9 @@ class Device(models.Model):
                                     choices=settings.PROTOCOLS)
     
     access_port = models.IntegerField()
+    
+    def __str__(self):
+        return "Device: %s" % self.name
 
     
     
