@@ -7,7 +7,6 @@ class CiscoIOS(Adapter):
         Adapter.__init__(self, 'ios')
     
     def get_config(self,conn):
-        print ("badass!")
         return
         # Verify guess_os() matches expected os.
         if conn.guess_os() != 'ios':
