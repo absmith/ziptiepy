@@ -5,10 +5,12 @@ from django.db import models
 from django.conf import settings
 from django.utils.encoding import python_2_unicode_compatible
 
+from dirtyfields import DirtyFieldsMixin
+
 # Create your models here.
 
 @python_2_unicode_compatible
-class Credential(models.Model):
+class Credential(DirtyFieldsMixin, models.Model):
     """ """       
     name = models.CharField(max_length=128)
     descripton = models.TextField(blank=True)
@@ -37,9 +39,11 @@ class Credential(models.Model):
                 if ipaddr.IPv4Address(ip) == ipaddr.IPv4Address(x):
                     match = True
         return match
+
+
         
 @python_2_unicode_compatible
-class Device(models.Model):
+class Device(DirtyFieldsMixin, models.Model):
     """ """
     created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
