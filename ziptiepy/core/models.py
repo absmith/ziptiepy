@@ -11,21 +11,21 @@ from dirtyfields import DirtyFieldsMixin
 
 @python_2_unicode_compatible
 class Credential(DirtyFieldsMixin, models.Model):
-    """ """       
+    """ """
     name = models.CharField(max_length=128)
     descripton = models.TextField(blank=True)
-    
+
     username = models.CharField(max_length=128)
     password = models.CharField(max_length=128)
-    
+
     enable_username = models.CharField(max_length=128, blank=True)
     enable_password = models.CharField(max_length=128, blank=True)
-    
+
     ip_mappings = models.TextField()
-    
+
     def __str__(self):
         return "Credential: %s" % self.name
-        
+
     def match_ip(self, ip):
         match = False
         for x in self.ip_mappings.split(','):
@@ -40,28 +40,32 @@ class Credential(DirtyFieldsMixin, models.Model):
                     match = True
         return match
 
+    def save(self, *args, **kwargs):
+        if self.is_dirty() or not self.id:
+            super(Credential, self).save(*args, **kwargs) # real save()
 
-        
+
+
 @python_2_unicode_compatible
 class Device(DirtyFieldsMixin, models.Model):
     """ """
     created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
-    
+
     access_ip = models.GenericIPAddressField()
     hostname = models.CharField(max_length=255)
-    
+
     adapter = models.CharField(max_length=50)
-    
+
     protocol = models.CharField(max_length=10,
                                     choices=settings.PROTOCOLS)
-    
-    access_port = models.IntegerField()
-    
-    def __str__(self):
-        return "Device: %s" % self.name
 
-    
-    
+    access_port = models.IntegerField()
+
+    def __str__(self):
+        return "Device: %s" % self.hostname
+
+
+
 
 
