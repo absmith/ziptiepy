@@ -1,4 +1,5 @@
 env/
+ziptiepy/repositories
 *.log
 *.pot
 *.pyc

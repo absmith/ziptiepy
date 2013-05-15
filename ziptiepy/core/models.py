@@ -1,11 +1,18 @@
+# python standard modules
 from base64 import b64encode, b64decode
-import ipaddr
+import os
 
+# django modules
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.conf import settings
 from django.utils.encoding import python_2_unicode_compatible
 
+# other modules
 from dirtyfields import DirtyFieldsMixin
+import ipaddr
+from git import *
 
 # Create your models here.
 
@@ -61,11 +68,27 @@ class Device(DirtyFieldsMixin, models.Model):
                                     choices=settings.PROTOCOLS)
 
     access_port = models.IntegerField()
-
+    
+    repo_init = models.BooleanField(default=False)
+    
     def __str__(self):
         return "Device: %s" % self.hostname
+    
+    def make_repo(self):
+        repo_dir = os.path.join(settings.REPO_DIR, str(self.id))
+        if not os.path.exists(repo_dir):
+            os.makedirs(repo_dir)
+            repo = Repo.init(repo_dir)
+    
+    def save(self, *args, **kwargs):
+        if self.is_dirty() or not self.id:
+            super(Device, self).save(*args, **kwargs) # real save()
+            
+@receiver(post_save, sender=Device)
+def Device_post_save_handler(sender, instance, **kwargs):
+    if not instance.repo_init:
+        instance.make_repo()
+        instance.repo_init = True
+        super(Device, instance).save() # real save()
 
-
-
-
-
+    
