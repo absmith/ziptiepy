@@ -6,5 +6,3 @@ Ziptiepy is a network device configuration backup system.
 ```
 pip install -r requirements
 ```
-ziptiepy
-========
