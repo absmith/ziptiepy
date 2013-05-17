@@ -16,8 +16,9 @@ hosts = []
 
 @autologin()
 def do_something(job, host, conn):
-    adapter = host.get('adapter')
-    print adapter_map[adapter].get_config(conn)
+    device = host.get('device')
+    config = adapter_map[device.adapter].get_config(conn)
+    device.save_config(config)
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -56,7 +57,7 @@ class Command(BaseCommand):
                         account.set_authorization_password(credential.enable_password)
 
                     host.set_account(account)
-                    host.set('adapter', device.adapter)
+                    host.set('device', device)
                     hosts.append(host)
         queue = Queue(max_threads = 1, verbose = -1)
         queue.run(hosts, do_something)

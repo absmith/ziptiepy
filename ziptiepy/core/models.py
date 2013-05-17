@@ -72,15 +72,40 @@ class Device(DirtyFieldsMixin, models.Model):
     def __str__(self):
         return "Device: %s" % self.hostname
 
+    def get_repo_dir(self):
+        return os.path.join(settings.REPO_DIR, str(self.id))
+
     def make_repo(self):
-        repo_dir = os.path.join(settings.REPO_DIR, str(self.id))
+        repo_dir = self.get_repo_dir()
         if not os.path.exists(repo_dir):
             os.makedirs(repo_dir)
             repo = Repo.init(repo_dir)
+            repo.index.commit("Initial Commit")
 
     def save(self, *args, **kwargs):
         if self.is_dirty() or not self.id:
             super(Device, self).save(*args, **kwargs) # real save()
+
+    def save_config(self, config):
+        repo_dir = self.get_repo_dir()
+        config_files = []
+
+        self.make_repo() # just make sure a repo exist for working in it.
+
+        for name, data in config.items():
+            config_file = os.path.join(repo_dir, name)
+            config_files.append(config_file)
+            with open(config_file, 'w') as f:
+                for line in data:
+                    f.write(line.strip() + '\n')
+
+        # add files if new and commit changes to git repo
+        repo = Repo(repo_dir)
+        repo.index.add(config_files)
+        if repo.is_dirty():
+            repo.index.commit("Automated Backup")
+
+        return config_files
 
 
 @receiver(post_save, sender=Device)

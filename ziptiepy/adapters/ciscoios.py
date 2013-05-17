@@ -9,6 +9,8 @@ class CiscoIOS(Adapter):
         Adapter.__init__(self, 'ciscoios')
 
     def get_config(self,conn):
+
+        configs = {}
         # Forcing Exscript driver
         # Had no luck using guess_os()
         conn.set_driver('ios')
@@ -23,5 +25,9 @@ class CiscoIOS(Adapter):
         conn.autoinit()
 
         conn.execute('show running-config')
+        configs['running-config'] = any_match(conn, r'(.*)')[:-1]
 
-        return any_match(conn, r'(.*)')
+        conn.execute('show startup-config')
+        configs['startup-config'] = any_match(conn, r'(.*)')[:-1]
+
+        return configs
