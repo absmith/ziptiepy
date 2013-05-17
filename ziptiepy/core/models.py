@@ -11,6 +11,7 @@ from django.utils.encoding import python_2_unicode_compatible
 
 # other modules
 from dirtyfields import DirtyFieldsMixin
+from django_fields.fields import EncryptedCharField
 import ipaddr
 from git import *
 
@@ -20,13 +21,13 @@ from git import *
 class Credential(DirtyFieldsMixin, models.Model):
     """ """
     name = models.CharField(max_length=128)
-    descripton = models.TextField(blank=True)
+    description = models.TextField(blank=True)
 
-    username = models.CharField(max_length=128)
-    password = models.CharField(max_length=128)
+    username = EncryptedCharField(max_length=128)
+    password = EncryptedCharField(max_length=128)
 
-    enable_username = models.CharField(max_length=128, blank=True)
-    enable_password = models.CharField(max_length=128, blank=True)
+    enable_username = EncryptedCharField(max_length=128, blank=True)
+    enable_password = EncryptedCharField(max_length=128, blank=True)
 
     ip_mappings = models.TextField()
 
@@ -36,7 +37,7 @@ class Credential(DirtyFieldsMixin, models.Model):
     def match_ip(self, ip):
         match = False
         for x in self.ip_mappings.split(','):
-            if ip.find('-') > 0:
+            if x.find('-') > 0:
                 ip1 = ipaddr.IPv4Address(x.split('-')[0])
                 ip2 = ipaddr.IPv4Address(x.split('-')[1])
                 for net in ipaddr.summarize_address_range(ip1,ip2):
