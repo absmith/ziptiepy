@@ -47,8 +47,10 @@ class Command(BaseCommand):
                 raise CommandError('Device ID "%s" does not exist' % options['device_id'])
 
         for device in devices:
+            found_credential = False
             for credential in Credential.objects.all():
                 if credential.match_ip(device.access_ip):
+                    found_credential = True
                     host = Host(device.protocol + device.access_ip)
                     account = (Account(credential.username,
                                                 credential.password))
@@ -59,6 +61,10 @@ class Command(BaseCommand):
                     host.set_account(account)
                     host.set('device', device)
                     hosts.append(host)
+                    break
+            if not found_credential:
+                print ("Skipping %s no credentials found." % device)
+
         queue = Queue(max_threads = 1, verbose = -1)
         queue.run(hosts, do_something)
         queue.shutdown()
