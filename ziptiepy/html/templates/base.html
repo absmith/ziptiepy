@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{% block title %}ZiptiePy{% endblock %}</title>
+  
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/reset.css' %}" type="text/css" />  
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />  
+</head>
+
+<body>
+  <div id="wrapper">
+    <header>
+      <hgroup>
+      <nav>
+        <a class="brand" href="javascript:void(0);">Ziptiepy</a>
+        <a href="javascript:void(0);">Main</a>
+        <a href="javascript:void(0);">Two</a>
+        <a href="javascript:void(0);">Three</a>
+      </nav>
+      </hgroup>
+    </header>
+    <div id="content">
+      {% block content %}{% endblock %}
+    </div>
+  <div>
+</body>
+</html>
