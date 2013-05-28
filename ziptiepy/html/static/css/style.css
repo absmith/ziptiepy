@@ -1,25 +1,156 @@
-header, hgroup, nav, section, article, aside, footer {display: block;}
+a {
+  text-decoration: none;
+    color: #BDD2E9;
+}
+
+a:hover {
+  color: #ffffff;
+}
+
+a.active {
+  color: #ffffff;
+}
+
+a.active:hover {
+  color: #BDD2E9;
+}
+
 
 body {
   font-family: Helvetica, Arial, sans-serif;
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 1em;
   color: #333333;
 }
 
 header {
+  padding: .5em 0;
+  color: #BDD2E9;
+  background-color: #414850;
+}
+
+header a {
+  color: #BDD2E9;
+}
+
+h1 {
+  margin: 0;
 }
 
 nav {
+  color: #BDD2E9;
+  background-color: #414850;
+  padding: 0 1em 0 100px;
 }
 
-nav a:hover {
-	color:#f6f6f6;
+nav a {
+  padding: 0 1em;
 }
 
-nav a:first-child {
-	border-radius: 6px 0 0 6px;
+.brand {
+  font-size: 1.2em;
+  padding-right: .5em;
+  padding-left: .3em;
 }
-nav a:last-child {
-	border-radius: 0 6px 6px 0;
+
+#container{
+  overflow: auto; /*clears the floats in the child elements */ 
+  width: 100%;
+  position: relative;
+  margin-top: 1em;
 }
+
+#content {
+  float: left;
+  margin-left: 100px;
+  min-height: 300px;
+}
+
+#leftcolumn {
+  background: #414850;
+  height: 100%;
+  position: absolute;
+  width: 100px;
+  left: 0;
+  float: left;
+}
+
+#leftcolumn div {
+  padding: 1em 0 0 1em;
+}
+
+#leftcolumn a:first-child {
+  padding-top: 1em;
+}
+  
+#wrapper {
+  width: 98%;
+  margin: auto;
+}
+
+/**
+ * user dropdown
+ */
+#user-tools {
+  float: right;
+}
+
+#user-tools a {
+  padding: .2em;
+}
+
+#user-tools ul {
+  text-align: left;
+  display: inline;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+}
+
+#user-tools ul li {
+  display: inline-block;
+  position: relative;
+  padding: 0;
+  cursor: pointer;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -ms-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+#user-tools ul li ul {
+  padding: 0;
+  position: absolute;
+  right: 1px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  white-space: nowrap;
+  -webkit-transiton: opacity 0.2s;
+  -moz-transition: opacity 0.2s;
+  -ms-transition: opacity 0.2s;
+  -o-transition: opacity 0.2s;
+  -transition: opacity 0.2s;
+}
+
+#user-tools ul li ul li { 
+  display: block; 
+  text-shadow: 0 -1px 0 #000;
+  background-color: #414850
+}
+
+
+
+#user-tools ul li:hover ul {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}
+
+

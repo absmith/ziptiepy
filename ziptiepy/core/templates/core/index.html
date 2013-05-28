@@ -1,8 +1,16 @@
 {% extends "base.html" %}
 
+{% block leftcolumn %}
+  <div>
+  <a href="javascript:void(0);">One</a><br>
+  <a href="javascript:void(0);">Two</a><br>
+  <a href="javascript:void(0);">Three</a><br>
+  </div>
+{% endblock %}
 
 {% block content %}
 {% for device in devices %}
     {{ device }}<br>
+
 {% endfor %}
 {% endblock %}
