@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% load static %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/jquery.dataTables.css' %}" type="text/css" /> 
+{% endblock %}
+
 {% block leftcolumn %}
   <div id="tools">
     <a href="javascript:void(0);">One</a><br>
@@ -9,8 +15,51 @@
 {% endblock %}
 
 {% block content %}
-{% for device in devices %}
-    {{ device }}<br>
+  <div id="devices">
+  </div>
+{% endblock %}
 
-{% endfor %}
+{% block javascript %}
+
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#devices').html( '<table cellpadding="0" cellspacing="0" border="0" class="display" id="devicesTable"></table>' );
+    
+    jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+      "alt-string-pre": function ( a ) {
+          return a.match(/alt="(.*?)"/)[1].toLowerCase();
+      },
+       
+      "alt-string-asc": function( a, b ) {
+          return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+      },
+   
+      "alt-string-desc": function(a,b) {
+          return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+      }
+    } );
+    
+    $('#devicesTable').dataTable( {
+      "aaData": [
+        {% for device in devices %}
+          [ '{{ device.hostname }}',
+            '{{ device.access_ip }}',
+            {% if not device.backup_status %}
+              '<img src="{% static 'images/flag_mark_gray.png' %}"  alt="none" />', ],
+            {% elif device.backup_status != "ok" %}
+              '<img src="{% static 'images/flag_mark_red.png' %}"  alt="error" />', ],
+            {% elif device.backup_status == "ok" %}
+              '<img src="{% static 'images/flag_mark_green.png' %}"  alt="ok" />', ],
+            {% endif %}  
+        {% endfor %}
+        ],
+        "aoColumns": [
+          { "sTitle": "Name" },
+          { "sTitle": "Access IP" },
+          { "sTitle": "Backup Status", "sType": "alt-string" },
+        ]
+    } );
+  } );
+</script>
 {% endblock %}

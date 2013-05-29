@@ -5,7 +5,8 @@
   
   {% load static %}
   <link rel="stylesheet" href="{% static 'css/normalize.css' %}" type="text/css" />  
-  <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />  
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" /> 
+  {% block stylesheet %}{% endblock %}
 </head>
 
 <body>
@@ -42,5 +43,9 @@
       {% block content %}{% endblock %}
     </section>
   </div>
+  
+  <script src="{% static 'js/jquery-2.0.0.min.js' %}"></script>
+  {% block javascript %}{% endblock %}
+  
 </body>
 </html>
