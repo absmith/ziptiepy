@@ -1,5 +1,5 @@
 # python modules
-import os
+import sys, os, traceback
 from optparse import make_option
 from Exscript import Host, Account, Queue, Logger
 from Exscript.util.start import start
@@ -9,6 +9,7 @@ from Exscript.util.report  import status, summarize
 
 # django modules
 from django.core.management.base import BaseCommand, CommandError
+from django.utils.timezone import now
 
 # ziptiepy modules
 from ziptiepy.core.models import Credential, Device
@@ -22,8 +23,17 @@ logger = Logger()
 @autologin()
 def do_backup(job, host, conn):
   device = host.get('device')
-  config = adapter_map[device.adapter].get_config(conn)
-  device.save_config(config)
+  #config = adapter_map[device.adapter].get_config(conn)
+  #device.save_config(config)
+  try:
+    adapter_map[device.adapter].backup(conn, device)
+  except:
+    exc_type, exc_value, exc_traceback = sys.exc_info()
+    #Do your verification using exc_value and exc_traceback
+
+    traceback.print_exception(exc_type, exc_value, exc_traceback,
+                              limit=3, file=sys.stderr)
+    raise
 
 class Command(BaseCommand):
   option_list = BaseCommand.option_list + (
@@ -47,7 +57,7 @@ class Command(BaseCommand):
 
     if options['device_id']:
       try:
-        devices = Device.objects.get(pk=int(options['device_id']))
+        devices = [ Device.objects.get(pk=int(options['device_id'])) ]
       except:
         raise CommandError('Device ID "%s" does not exist' % options['device_id'])
 
@@ -74,11 +84,13 @@ class Command(BaseCommand):
     queue = Queue(max_threads = 5, verbose = -1, stderr=open(os.devnull, 'w'))
     queue.run(hosts, do_backup)
     queue.shutdown()
-    
-    # Any connectiveity proablem sstatus, 
+
     for log in logger.get_logs():
+      device = Device.objects.get(access_ip=log.get_name())
       if log.has_error():
-        device = Device.objects.get(access_ip=log.get_name())
         device.backup_status = log.get_error(False)
-        device.save()
+      else:
+        device.backup_status = 'ok'
+      device.backup_last_ran = now()
+      device.save()
 

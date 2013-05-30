@@ -63,11 +63,15 @@ class Device(DirtyFieldsMixin, models.Model):
   backup_status = models.CharField(max_length=255, blank=True)
   backup_last_ran = models.DateTimeField(null=True)
   created = models.DateTimeField(auto_now_add=True)
-  hostname = models.CharField(max_length=255)
+  hostname = models.CharField(max_length=255, blank=True)
   last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
+  make = models.CharField(max_length=255, blank=True)
+  model = models.CharField(max_length=255, blank=True)
   protocol = models.CharField(max_length=10,
                   choices=settings.PROTOCOLS)
-
+  type = models.CharField(max_length=255, blank=True)
+  software_version = models.CharField(max_length=255, blank=True)
+  serial_number = models.CharField(max_length=255, blank=True)
 
 
   def __str__(self):
@@ -87,26 +91,22 @@ class Device(DirtyFieldsMixin, models.Model):
     if self.is_dirty() or not self.id:
       super(Device, self).save(*args, **kwargs) # real save()
 
-  def save_config(self, config):
+  def save_config(self, name, config):
     repo_dir = self.get_repo_dir()
     config_files = []
 
-    self.make_repo() # just make sure a repo exist for working in it.
+    self.make_repo() # just make sure a repo exist before working in it.
 
-    for name, data in config.items():
-      config_file = os.path.join(repo_dir, name)
-      config_files.append(config_file)
-      with open(config_file, 'w') as f:
-        for line in data:
-          f.write(line.strip() + '\n')
+    config_file = os.path.join(repo_dir, name)
+    with open(config_file, 'w') as f:
+      for line in config:
+        f.write(line.strip() + '\n')
 
-    # add files if new and commit changes to git repo
+    # add file and commit changes to git repo
     repo = Repo(repo_dir)
-    repo.index.add(config_files)
+    repo.index.add([config_file])
     if repo.is_dirty():
       repo.index.commit("Automated Backup")
-
-    return config_files
 
 
 @receiver(post_save, sender=Device)
