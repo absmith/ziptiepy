@@ -61,7 +61,7 @@ class Device(DirtyFieldsMixin, models.Model):
   access_port = models.IntegerField()
   adapter = models.CharField(max_length=50)
   backup_status = models.CharField(max_length=255, blank=True)
-  backup_last_ran = models.DateTimeField(null=True)
+  backup_last_ran = models.DateTimeField(blank=True, null=True)
   created = models.DateTimeField(auto_now_add=True)
   hostname = models.CharField(max_length=255, blank=True)
   last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
@@ -75,10 +75,22 @@ class Device(DirtyFieldsMixin, models.Model):
 
 
   def __str__(self):
-    return "Device: %s" % self.hostname
+    if self.hostname:
+        return "Device: %s" % self.hostname
+    else:
+        return "Device: %s" % self.access_ip
 
   def get_repo_dir(self):
     return os.path.join(settings.REPO_DIR, str(self.id))
+
+  def list_files(self, ref='HEAD'):
+    files = []
+    repo = Repo(self.get_repo_dir())
+    commit = repo.commit(ref)
+    for blob in commit.tree.blobs:
+      files.append(blob.name)
+
+    return files
 
   def make_repo(self):
     repo_dir = self.get_repo_dir()

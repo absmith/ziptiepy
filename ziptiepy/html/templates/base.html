@@ -12,29 +12,31 @@
 <body>
   <div id="wrapper">
     <header>
-      <h1><a class="brand" href="javascript:void(0);">Ziptiepy</a></h1>
-    </header>
-    <nav>
-      <a class="active" href="javascript:void(0);">Main</a>
-      <a class="" href="javascript:void(0);">Two</a>
-      {% if user.is_active and user.is_staff %}
-        <div id="user-tools">
-          <ul>
-            <li>
-              {% filter force_escape %}{% firstof user.get_short_name user.get_username %}{% endfilter %}
-              <ul>
-                {% block userlinks %}
-                  {% if user.has_usable_password %}
-                    <li><a href="#">Change password</a></li>
-                  {% endif %}
-                    <li><a href="#">Log out</a></li>
-                {% endblock %}
-              </ul>
-            </li>
-          </ul>
-        </div>
+      <div id="branding">
+        <a href="/">Ziptiepy</a>
+      </div>
+      <nav>
+        <a class="active" href="/">Main</a>
+        {% if user.is_active and user.is_staff %}
+          <div id="user-tools">
+            <ul>
+              <li>
+                {% filter force_escape %}{% firstof user.get_short_name user.get_username %}{% endfilter %}
+                <ul>
+                  {% block userlinks %}
+                    {% if user.has_usable_password %}
+                      <li><a href="#">Change password</a></li>
+                    {% endif %}
+                      <li><a href="#">Log out</a></li>
+                  {% endblock %}
+                </ul>
+              </li>
+            </ul>
+          </div>
         {% endif %}
-  </nav>
+      </nav>
+
+  </header>
   <div id="container">
     <section id="leftcolumn">
       {% block leftcolumn %}{% endblock %}

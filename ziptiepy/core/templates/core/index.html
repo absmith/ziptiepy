@@ -3,28 +3,88 @@
 {% load static %}
 
 {% block stylesheet %}
-<link rel="stylesheet" href="{% static 'css/jquery.dataTables.css' %}" type="text/css" /> 
+<link rel="stylesheet" href="{% static 'css/jquery.dataTables.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/custom-theme/jquery-ui-1.10.3.custom.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/shCore.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/shThemeDefault.css' %}" type="text/css" /> 
 {% endblock %}
 
 {% block leftcolumn %}
   <div id="tools">
-    <a href="javascript:void(0);">One</a><br>
-    <a href="javascript:void(0);">Two</a><br>
-    <a href="javascript:void(0);">Three</a><br>
+    <a href="javascript:void(0);">Credentials</a><br>
+    <a href="javascript:void(0);">Add Device</a><br>
+    <a href="javascript:void(0);"></a><br>
   </div>
 {% endblock %}
 
 {% block content %}
   <div id="devices">
   </div>
+  <div style="clear:both"></div>
+  <div id="tabs">
+    <ul>
+    </ul>
+  </div>
 {% endblock %}
 
 {% block javascript %}
 
+<script src="{% static 'js/jquery-ui-1.10.3.custom.js' %}"></script>
 <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/shCore.js' %}"></script>
+<script src="{% static 'js/shBrushDiff.js' %}"></script>
 <script type="text/javascript">
   $(document).ready(function() {
+    
+    SyntaxHighlighter.defaults['toolbar'] = false;
+    SyntaxHighlighter.all()
+    
+    var tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>"
+
+    var tabs = $( "#tabs" ).tabs({
+      load: function( event, ui ) {
+        SyntaxHighlighter.highlight();
+      }
+    });
+    
+    // close icon: removing the tab on click
+    tabs.delegate( "span.ui-icon-close", "click", function() {
+      var panelId = $( this ).closest( "li" ).remove().attr( "aria-controls" );
+      $( "#" + panelId ).remove();
+      tabs.tabs( "refresh" );
+    });
+ 
+    tabs.bind( "keyup", function( event ) {
+      if ( event.altKey && event.keyCode === $.ui.keyCode.BACKSPACE ) {
+        var panelId = tabs.find( ".ui-tabs-active" ).remove().attr( "aria-controls" );
+        $( "#" + panelId ).remove();
+        tabs.tabs( "refresh" );
+      }
+    });
+    
+    // addTab function: creates tab or makes existing tab active
+    function addTab(index) {
+      var label = "Tab " + index,
+        id = "tabs-" + index,
+        li = $( tabTemplate.replace( /#\{href\}/g, "device/" + index ).replace( /#\{label\}/g, label ) ),
+        tabContentHtml = "Tab " + index + " content.";
+      
+      if (tabs.find("#" + id).length <= 0)
+      {        
+        tabs.find( ".ui-tabs-nav" ).append( li );
+        tabs.find(li).find('a').attr('id', id)
+        //tabs.append( "<div id='" + id + "'><p>" + tabContentHtml + "</p></div>" );
+        tabs.tabs( "refresh" );
+      }
+      
+      var index = $('#' + id).parent().index()
+      tabs.tabs("option", "active", index);
+      
+    }
+    
+    
     $('#devices').html( '<table cellpadding="0" cellspacing="0" border="0" class="display" id="devicesTable"></table>' );
+    
     
     jQuery.extend( jQuery.fn.dataTableExt.oSort, {
       "alt-string-pre": function ( a ) {
@@ -40,26 +100,47 @@
       }
     } );
     
-    $('#devicesTable').dataTable( {
+    oTable = $('#devicesTable').dataTable( {
+      "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+        $(nRow).attr('id', "row_" + aData[6]);
+      },
       "aaData": [
         {% for device in devices %}
-          [ '{{ device.hostname }}',
-            '{{ device.access_ip }}',
+          [ 
             {% if not device.backup_status %}
-              '<img src="{% static 'images/flag_mark_gray.png' %}"  alt="none" />', ],
+              '<img src="{% static 'images/flag_mark_gray.png' %}" height="16px" alt="none" />',            
             {% elif device.backup_status != "ok" %}
-              '<img src="{% static 'images/flag_mark_red.png' %}"  alt="error" />', ],
+              '<img src="{% static 'images/flag_mark_red.png' %}" height="16px" alt="error" />',
             {% elif device.backup_status == "ok" %}
-              '<img src="{% static 'images/flag_mark_green.png' %}"  alt="ok" />', ],
+              '<img src="{% static 'images/flag_mark_green.png' %}" height="16px" alt="ok" />',
             {% endif %}  
+            '{{ device.access_ip }}',
+            '{{ device.hostname }}',
+            '{{ device.make }}',
+            '{{ device.model }}',
+            '{{ device.type }}',
+            '{{ device.id }}',
+          ],
         {% endfor %}
         ],
         "aoColumns": [
-          { "sTitle": "Name" },
+          { "sType": "alt-string" },
           { "sTitle": "Access IP" },
-          { "sTitle": "Backup Status", "sType": "alt-string" },
+          { "sTitle": "Hostname" },
+          { "sTitle": "Make" },
+          { "sTitle": "Model" },
+          { "sTitle": "Device Type" },
         ]
     } );
+    
+    $("#devices tbody tr").click( function( e ) {
+        oTable.$('tr.row_selected').removeClass('row_selected');
+        $(this).addClass('row_selected');
+        
+        var index = $(this).attr('id').substr(4)
+        addTab(index)
+    });
+    
   } );
 </script>
 {% endblock %}
