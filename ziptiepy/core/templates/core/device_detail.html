@@ -1,14 +1,60 @@
-{% load static %}
-<div id="stuff">
-  <pre class="brush: diff">
-@@ -14,5 +14,5 @@ urlpatterns = patterns('',
-
-     # Uncomment the next line to enable the admin:
-     url(r'^admin/', include(admin.site.urls)),
--    url(r'^$', include('ziptiepy.core.urls')),
-+    url(r'^core/', include('ziptiepy.core.urls')),
- )
-  </pre>
+<div id="left">
+  <div id="info">
+    <table border="1">
+      <caption>Device Information</caption>
+      <thead>
+        <tr>
+          <th>col1</th>
+          <th>col2</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>row 1 co1</td>
+          <td>row 1 co2</td>
+        </tr>
+        <tr>
+          <td>row 2 co1</td>
+          <td>row 2 co2</td>
+        </tr>
+        <tr>
+          <td>row 2 co1</td>
+          <td>row 2 co2</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="filelist">
+    <table border="1">
+      <caption>Configuration Files</caption>
+      <thead>
+        <tr>
+          <th>col1</th>
+          <th>col2</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>row 1 co1</td>
+          <td>row 1 co2</td>
+        </tr>
+        <tr>
+          <td>row 2 co1</td>
+          <td>row 2 co2</td>
+        </tr>
+        <tr>
+          <td>row 2 co1</td>
+          <td>row 2 co2</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
+<div id="right">
+<pre>
+files will be displayed here
+</pre>
+</div>
+
 
 

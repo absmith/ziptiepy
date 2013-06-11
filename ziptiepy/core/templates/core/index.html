@@ -63,9 +63,8 @@
     });
     
     // addTab function: creates tab or makes existing tab active
-    function addTab(index) {
-      var label = "Tab " + index,
-        id = "tabs-" + index,
+    function addTab(index, label) {
+      var id = "tabs-" + index,
         li = $( tabTemplate.replace( /#\{href\}/g, "device/" + index ).replace( /#\{label\}/g, label ) ),
         tabContentHtml = "Tab " + index + " content.";
       
@@ -77,6 +76,7 @@
         tabs.tabs( "refresh" );
       }
       
+      //tabs.hide();
       var index = $('#' + id).parent().index()
       tabs.tabs("option", "active", index);
       
@@ -137,8 +137,10 @@
         oTable.$('tr.row_selected').removeClass('row_selected');
         $(this).addClass('row_selected');
         
-        var index = $(this).attr('id').substr(4)
-        addTab(index)
+        var ip = oTable.fnGetData(this)[1];
+        var hostname = oTable.fnGetData(this)[2];
+        var index = $(this).attr('id').substr(4);
+        addTab(index, hostname + " : " + ip);
     });
     
   } );
