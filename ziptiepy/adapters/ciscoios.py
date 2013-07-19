@@ -9,7 +9,7 @@ from ziptiepy.adapters import Adapter
 class CiscoIOS(Adapter):
   """   """
   def __init__(self):
-      Adapter.__init__(self, 'ciscoios')
+      Adapter.__init__(self, 'Cisco IOS')
 
   def backup(self, conn, device):
 

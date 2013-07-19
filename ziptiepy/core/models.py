@@ -1,5 +1,6 @@
 # python standard modules
 from base64 import b64encode, b64decode
+from datetime import datetime
 import os
 
 # django modules
@@ -8,6 +9,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.timezone import get_current_timezone, make_aware
 
 # other modules
 from dirtyfields import DirtyFieldsMixin
@@ -84,12 +86,16 @@ class Device(DirtyFieldsMixin, models.Model):
     return os.path.join(settings.REPO_DIR, str(self.id))
 
   def list_files(self, ref='HEAD'):
-    files = []
-    repo = Repo(self.get_repo_dir())
+    """ returns list of files in repo + commit timestamp history """
+    files = {}
+    repo = g
     commit = repo.commit(ref)
     for blob in commit.tree.blobs:
-      files.append(blob.name)
-
+      timestamps = []
+      for c in repo.iter_commits(paths=blob.abspath):
+        timestamps.append( make_aware(datetime.utcfromtimestamp(c.committed_date),utc))
+      files[blob.name] = sorted(timestamps)
+  
     return files
 
   def make_repo(self):

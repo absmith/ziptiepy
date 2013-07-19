@@ -168,4 +168,42 @@ table.display tr.odd.row_selected td {
   visibility: visible;
 }
 
+/**
+ * device details
+ */
+#tabs table {
+  width: 400px;
+}
 
+#tabs table caption {
+  text-align: left;
+  margin-bottom: 1em;
+  font-weight: bold;
+}
+
+#tabs table thead {
+  border-bottom:1px solid #000;
+} 
+
+#tabs table tr {
+  border-bottom:1px solid #aaaaaa;
+} 
+
+#left {
+  left: 0;
+  float: left;
+}
+
+#info {
+  box-shadow:2px 2px 3px #aaaaaa;
+  border: 1px solid #aaaaaa;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
+#filelist {
+  box-shadow:2px 2px 3px #aaaaaa;
+  border: 1px solid #aaaaaa;
+  padding: 1em;
+}
+  

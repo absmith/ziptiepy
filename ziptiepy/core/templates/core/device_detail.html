@@ -1,31 +1,47 @@
+<div id="container">
 <div id="left">
   <div id="info">
-    <table border="1">
+
+    <table>
       <caption>Device Information</caption>
-      <thead>
-        <tr>
-          <th>col1</th>
-          <th>col2</th>
-        </tr>
-      </thead>
       <tbody>
         <tr>
-          <td>row 1 co1</td>
-          <td>row 1 co2</td>
+          <td>Hostname</td>
+          <td>{{object.hostname}}</td>
         </tr>
         <tr>
-          <td>row 2 co1</td>
-          <td>row 2 co2</td>
+          <td>IP Address</td>
+          <td>{{object.access_ip}}</td>
         </tr>
         <tr>
-          <td>row 2 co1</td>
-          <td>row 2 co2</td>
+          <td>Adapter</td>
+          <td>{{object.adapter}}</td>
+        </tr>
+        <tr>
+          <td>Make</td>
+          <td>{{object.make}}</td>
+        </tr>
+        <tr>
+          <td>Model</td>
+          <td>{{object.model}}</td>
+        </tr>
+        <tr>
+          <td>Device Type</td>
+          <td>{{object.type}}</td>
+        </tr>
+        <tr>
+          <td>Software Version</td>
+          <td>{{object.software_version}}</td>
+        </tr>
+        <tr>
+          <td>Serial Number</td>
+          <td>{{object.serial_number}}</td>
         </tr>
       </tbody>
     </table>
   </div>
   <div id="filelist">
-    <table border="1">
+    <table >
       <caption>Configuration Files</caption>
       <thead>
         <tr>
@@ -51,10 +67,10 @@
   </div>
 </div>
 <div id="right">
-<pre>
-files will be displayed here
-</pre>
+  <pre>
+  files will be displayed here
+  </pre>
 </div>
-
+</div>
 
 

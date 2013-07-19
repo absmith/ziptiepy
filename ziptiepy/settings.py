@@ -175,6 +175,7 @@ LOGGING = {
     }
 }
 
+
 # default location for device git repository
 REPO_DIR = os.path.join(PROJECT_DIR, 'repositories')
 
