@@ -172,7 +172,8 @@ table.display tr.odd.row_selected td {
  * device details
  */
 #tabs table {
-  width: 400px;
+  width: 95%;
+  margin: auto;
 }
 
 #tabs table caption {
@@ -192,18 +193,28 @@ table.display tr.odd.row_selected td {
 #left {
   left: 0;
   float: left;
+  width: 35%
+}
+
+#right {
+  float: right;
+  width: 64%;
 }
 
 #info {
+
+}
+
+#file span {
+  font-weight: bold;
+}
+
+.box {
   box-shadow:2px 2px 3px #aaaaaa;
   border: 1px solid #aaaaaa;
   padding: 1em;
   margin-bottom: 1em;
 }
 
-#filelist {
-  box-shadow:2px 2px 3px #aaaaaa;
-  border: 1px solid #aaaaaa;
-  padding: 1em;
-}
+ 
   

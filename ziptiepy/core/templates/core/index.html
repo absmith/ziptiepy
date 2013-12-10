@@ -33,11 +33,13 @@
 <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'js/shCore.js' %}"></script>
 <script src="{% static 'js/shBrushDiff.js' %}"></script>
+<script src="{% static 'js/shBrushPlain.js' %}"></script>
+
 <script type="text/javascript">
   $(document).ready(function() {
     
     SyntaxHighlighter.defaults['toolbar'] = false;
-    SyntaxHighlighter.all()
+    SyntaxHighlighter.all();
     
     var tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>"
 
