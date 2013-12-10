@@ -1,6 +1,7 @@
 # python standard modules
 from base64 import b64encode, b64decode
 from datetime import datetime
+import pytz
 import os
 
 # django modules
@@ -85,15 +86,15 @@ class Device(DirtyFieldsMixin, models.Model):
   def get_repo_dir(self):
     return os.path.join(settings.REPO_DIR, str(self.id))
 
-  def list_files(self, ref='HEAD'):
+  def list_files(self, ref='HEAD', count=-1, skip=0):
     """ returns list of files in repo + commit timestamp history """
     files = {}
-    repo = g
+    repo = Repo(self.get_repo_dir())
     commit = repo.commit(ref)
     for blob in commit.tree.blobs:
       timestamps = []
-      for c in repo.iter_commits(paths=blob.abspath):
-        timestamps.append( make_aware(datetime.utcfromtimestamp(c.committed_date),utc))
+      for c in repo.iter_commits(paths=blob.abspath, max_count=count, skip=skip):
+        timestamps.append( make_aware(datetime.utcfromtimestamp(c.committed_date), pytz.utc))
       files[blob.name] = sorted(timestamps)
   
     return files
